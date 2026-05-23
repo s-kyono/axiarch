@@ -1,0 +1,28 @@
+# コア (Core)
+
+> このフォルダはプロジェクトの **中核設定・教訓ログ・テンプレート** を管理します。
+> 他のドメインフォルダ（`engineering/`, `security/` 等）とは異なり、
+> 結晶化された教訓の「一時蓄積場所」（`core/010_project_lessons_log.md`）を兼ねます。
+
+## 対応 Universal ルール
+
+| ファイル | 概要 |
+|:--------|:-----|
+| `universal/core/000_core_mindset.md` | コア・フィロソフィーとマインドセット |
+| `universal/core/100_governance.md` | ガバナンス・プロトコル |
+| `universal/core/200_language_protocol.md` | 言語プロトコル |
+
+## フォルダ内ファイル
+
+| ファイル | 役割 |
+|:--------|:-----|
+| `core/000_project_overview.md` | プロジェクト概要・技術スタック定義 |
+| `core/010_project_lessons_log.md` | 教訓の中央インデックス（結晶化の起点） |
+| `core/998_feature_spec_template.md` | 機能仕様テンプレート |
+| `core/999_project_specific_template.md` | プロジェクト固有ルールテンプレート |
+
+## 運用ガイド
+
+- 教訓の結晶化プロセスは `axiarch-rules/{lang}/CRYSTALLIZATION_PROTOCOL.md` に従うこと
+- `core/` 内の昇華ルールファイルは既存の `000`, `010`, `998`, `999` などとの衝突を避け、`000`〜`999` の空き番号から選ぶ（`020_` は初回候補例であり予約帯域ではない）
+- 新規ドメインフォルダはAIが独断作成しない。既存フォルダを優先し、分類不能な新ドメインはユーザー承認後に拡張可能。

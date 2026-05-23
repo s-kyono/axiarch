@@ -1,0 +1,80 @@
+# General
+.DS_Store
+.idea/
+.vscode/
+*.log
+tmp/
+.cache/
+
+# Secrets & Environments
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.cert
+*.crt
+*.pfx
+*.jks
+*.keystore
+client_secret.json
+serviceAccountKey.json
+credentials.json
+
+# Generated Files
+*.pdf
+*.csv
+*.xlsx
+
+# Web & Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+lerna-debug.log
+dist/
+out/
+.next/
+*.tsbuildinfo
+coverage/
+
+# Flutter/Dart
+.dart_tool/
+.packages
+build/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+android/local.properties
+
+# Firebase & GCP
+.firebase/
+firebase-debug.log
+
+# OS & Editor
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+._*
+*.swp
+.history/
+
+# Claude Code: ignore session data and personal settings; allow committed team config (settings.json)
+.claude/worktrees/
+.claude/projects/
+.claude/settings.local.json
+
+# Codex: ignore session data and personal settings; allow committed team config (hooks.json)
+.codex/worktrees/
+.codex/projects/
+.codex/hooks.local.json
+
+# Axiarch per-task working documents (regenerated per session, never committed)
+task.md
+implementation_plan.md
+walkthrough.md
+.axiarch/process-doc-history/
+.axiarch/process-doc-state/
+
+# Social preview (uploaded via GitHub Settings, not committed)
+social-preview.png

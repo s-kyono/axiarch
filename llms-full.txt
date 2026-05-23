@@ -1,0 +1,399 @@
+# Axiarch (AX-ee-ark) — Full Specification
+
+> Constitution-Driven AI Agent Governance Framework
+> Stable Version: 1.11.0 | License: Apache 2.0
+> Repository: https://github.com/s-kyono/axiarch
+
+Axiarch is an open-source governance framework that reduces the risk of quality
+drift, hallucination, and uncontrolled behavior in AI-assisted software
+development. It defines minimum quality standards across engineering, product,
+security, operations, business, AI, and governance work through a multi-layer
+constitutional architecture, making consistent output quality easier to maintain
+across agents and operator skill levels.
+
+OpenAI Codex, Claude Code, and Google Antigravity are the primary targets. v1.0.0 adds current-task Markdown evidence rotation plus native task-state sync rules for Codex and Claude Code. Google Antigravity is the only explicitly production-validated target. Codex and Claude Code have native integration paths, but practical validation evidence is still being accumulated. Cursor, GitHub Copilot, Windsurf, Aider, and other tools remain extended pointer-only or unverified candidates through Markdown pointer files, with no operation guarantee.
+
+## What Problem Does Axiarch Solve?
+
+Without governance, AI agents suffer from:
+- **Context amnesia**: Architectural decisions are forgotten between sessions
+- **Operator-dependent quality**: Output quality varies with instruction precision
+- **Vibe coding drift**: Code that looks correct but silently violates patterns
+- **Knowledge evaporation**: Hard-won lessons are lost and re-discovered repeatedly
+
+Axiarch mitigates these risks by defining a quality floor and autonomous context loading through constitutional architecture.
+
+## Core Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Layer 1: Universal (Immutable Constitution)                 │
+│ ├─ AGENTS.md (Top-Level Protocol / Behavior Protocols)             │
+│ └─ Universal Rules (39 files / Immutable Governance Rules)   │
+├─────────────────────────────────────────────────────────────┤
+│ Layer 2: Blueprint (Mutable Project State)                  │
+│ └─ Project Overview, Feature Specs, Lessons Log             │
+├─────────────────────────────────────────────────────────────┤
+│ Layer 3: Prompts (Optional Execution Framework)             │
+│ └─ Task-specific prompts for audit, QA, upgrade execution   │
+├─────────────────────────────────────────────────────────────┤
+│ Execution Documents — Per-Task                       ← Gen. │
+│ task.md, implementation_plan.md, walkthrough.md             │
+├─────────────────────────────────────────────────────────────┤
+│ Feedback Loop — Crystallization                      ← Cont.│
+│ Lessons → Rules(Layer 2) → Better Lessons                   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## AGENTS.md — The Constitution (9 Protocols)
+
+AGENTS.md is the top-level protocol governing AI agent behavior. It contains
+9 mandatory protocols that apply to every interaction:
+
+### Protocol 0: AI Self-Completion Mandate (Highest-Priority Rule)
+The AI MUST NOT burden the user with verification tasks. All log checking,
+error analysis, build verification, environment variable inspection, and
+file content review must be performed by the AI using its own tools.
+
+### Protocol 1: Deployment Ban
+No `git push` without explicit user permission. Before requesting push
+approval, run the appropriate local checks for the target stack; for
+TypeScript projects this includes type checking (`tsc --noEmit`) and build
+verification (`npm run build`).
+
+### Protocol 2: Language First
+Project Native Language (Japanese or English) determines document language.
+Code variables/functions use English. All plans, tasks, specifications,
+and explanations must use the project's native language.
+
+### Protocol 3: Database Integrity
+No manual SQL execution via DB management consoles. All migrations must
+go through CI/CD pipelines via Git commits. Local changes must be
+formalized as migration files.
+
+### Protocol 4: SSOT Sync
+After merging, leaving a working branch, or otherwise returning to the
+repository SSOT, sync with the main branch (`git pull origin main`). Branches
+are created only when necessary. Verify local main is up-to-date before
+starting new tasks.
+
+### Protocol 5: Existing Functionality Protection
+Running features are "Stable Assets" — no unnecessary modification.
+Exceptions: security holes, constitution violations, critical bugs
+(require user approval). New features use isolation (wrapper components,
+extension hooks) rather than modifying existing code.
+
+### Protocol 6: Anti-Full-Overwrite
+Full-file overwrite of existing files is prohibited by default. All
+modifications must use diff-based editing tools. Exception granted only
+when user explicitly permits (e.g., "full rewrite OK"). Even for large
+changes (50%+ of file), use multi-chunk diff edits. User asset protection
+always takes priority over AI convenience.
+
+### Protocol 7: Role & Behavior
+The AI acts as Senior Architect and Lead Engineer — not a passive coder.
+It proactively identifies missing specifications and provides immediate
+output without social pleasantries.
+
+### Protocol 8: Process & Documentation
+Strict workflow: Load rules (LOADING_PROTOCOL) → Blueprint First →
+Full-content output → Always generate task.md, implementation_plan.md,
+walkthrough.md. In v1.0.0 these three files are current-task Markdown
+evidence: `axiarch-task-state.sh` archives changed previous copies before
+refresh and regenerates templates in the Project Native Language. Markdown does not update native agent UI state by itself. Codex uses
+`update_plan`; Claude Code uses `TaskCreate` / `TaskUpdate` / `TaskList` /
+`TaskGet`, with `TodoWrite` only as an older-runtime fallback. Includes Boot
+Sequence Protocol (Stop & Wait, No Hallucination, Exact Match Only).
+
+### Protocol 9: Continuous Improvement
+After each task, scan for lessons learned and crystallize them into
+Blueprint rules following CRYSTALLIZATION_PROTOCOL.
+
+---
+
+## axiarch-rules/{lang}/LOADING_PROTOCOL.md — 5-Step Rule Loading
+
+The AI follows this protocol at the start of every conversation:
+
+### Step 1: Task Classification
+Classify the user's instruction into task types: security, architecture,
+performance, ui_design, api, i18n, finops, testing, or other.
+
+### Step 2: INDEX-Based File Identification
+Read `axiarch-rules/{lang}/INDEX.md` to identify which Universal Rules and Blueprint files
+correspond to the task type. Uses a two-class system:
+- Class S (Universal): Immutable, project-transcending rules
+- Class A (Blueprint): Mutable, project-specific specs and lessons
+
+### Step 3: File Loading (Anti-Laziness Mandate)
+Actually open and read each identified file using tools. Reading only
+INDEX summaries is strictly prohibited. For large files (1000+ lines),
+use table of contents or appendix to selectively load relevant sections.
+
+### Step 4: Post-Load Verification
+Record loaded files in task.md. If any applicable file was missed,
+stop work and load it before proceeding.
+
+### Step 5: Begin Work
+Only after Steps 1-4 are complete may code modifications begin.
+
+---
+
+## axiarch-rules/{lang}/CRYSTALLIZATION_PROTOCOL.md — Lesson Auto-Crystallization
+
+A 6-step process for converting lessons into persistent rules:
+
+1. **Classify**: Determine the lesson's domain (DB/Auth → engineering/,
+   Security → security/, Design → design/, etc.)
+2. **Dedup Check**: Check whether a similar rule already exists in Universal.
+   If covered there, do not duplicate it in Blueprint.
+3. **Search**: Check if a domain file already exists in the Blueprint
+   folder. If yes, append to it.
+4. **Accumulate**: If no domain file exists, temporarily store in
+   core/010_project_lessons_log.md with Domain/Target Folder tags.
+5. **Threshold Check**: When 3+ lessons of the same domain accumulate,
+   create a proper domain file and move lessons there.
+6. **Update Index**: Maintain core/010 as an index of unsorted
+   lessons + links to separated domain files.
+
+Design philosophy: Co-location principle — lessons are placed in the
+same folder as related rule files for maximum context efficiency.
+
+---
+
+## Layer 1: Universal Rules (Immutable Constitution)
+
+All Universal rules are immutable ("Constitution"). 3,000+ standards spanning engineering, product, security, operations, AI, business, QA, FinOps, and governance.
+
+### core/ — Foundation Philosophy (3 files)
+- **000_core_mindset.md**: Core behavioral principles. Priority hierarchy
+  (Security > UX > Profitability > DX), strict tolerance, Headless First,
+  SSOT, band-aid ban, Git/deploy protocols, regression risk reduction.
+- **100_governance.md**: Constitutional authority, amendment protocol,
+  AI agent authority control, multi-project federation.
+- **200_language_protocol.md**: Three-layer language model, code/document
+  language conventions, AI communication protocol.
+
+### product/ — Business & Growth (10 files)
+- **000_product_strategy.md**: MVP→PMF, monetization, unit economics,
+  review/trust systems, tag-based search, interactive engine.
+- **100_market_validation.md**: Build Trap avoidance, JTBD, Pain Severity
+  Scoring, TAM/SAM/SOM, Mom Test, MVP types, Sean Ellis Test, Retention
+  Curve, False PMF Signal protocol, Founder-Market Fit, Regulatory PMF,
+  Marketplace PMF, Platform & API PMF, PLG-SLG Hybrid PMF, AI-Native
+  Validation, PMF Decay & Erosion. 18 parts, 105+ sections, 120 rules.
+- **200_go_to_market.md**: Positioning Canvas, Category Creation, ICP,
+  PLG/SLG/MLG/CLG/ELG, Product Hunt protocol, GTM KPI, ABM 3 Tier,
+  Signal-Based GTM, Agentic GTM, Competitive Displacement. 15 parts,
+  80+ sections, 101 rules.
+- **300_revenue_monetization.md**: FinOps, Stripe, point economy, AI token
+  economics, dynamic pricing, tax/invoice compliance.
+- **400_pricing_strategy.md**: Value-Based Pricing, Van Westendorp PSM,
+  Usage-based metrics, Freemium design, Tier design, GBB Framework,
+  AI-Native Monetization, Agentic AI Pricing, Price Psychology,
+  Enterprise negotiation, Dynamic Pricing, Global multi-currency.
+  17 parts, 87 sections, 99 rules, 30 anti-patterns.
+- **500_growth_marketing.md**: PLG, SEO/GEO, onboarding, retention,
+  ad feed integration, OGP, first-party data, KPI framework.
+- **600_brand_strategy.md**: Golden Circle, Brand Pyramid, Design Tokens,
+  Voice/Tone, copywriting, crisis response. 8 parts, 30 sections.
+- **700_appstore_compliance.md**: Apple/Google guidelines, IAP, privacy
+  manifests, ASO, pre-submission checklist.
+- **800_internationalization.md**: i18n/L10n, Unicode, CLDR, RTL,
+  translation workflows, regional compliance.
+- **900_fundraising_ir.md**: Default Alive philosophy, stage benchmarks,
+  pitch deck standard, term sheets, Data Room, investor reports.
+  8 parts, 32 sections.
+
+### design/ — Design & UX (1 file)
+- **000_design_ux.md**: 25-part expanded edition (v3.0). Primary Directive:
+  Consistency > Accessibility > Delight > Aesthetics > Dev Speed. W3C DTCG
+  2025.10 Design Tokens, WCAG 2.2 AA + WCAG 3.0 forward compatibility (APCA),
+  Dark Pattern ban (FTC/DSA/EU DFA), Agentic AI UX patterns, Calm UI,
+  Voice UI, Design System as a Product, Design FinOps, 35 anti-patterns.
+
+### engineering/ — Technical Implementation (10 files)
+- **000_engineering_standards.md**: Engineering standards. 13 parts,
+  80 sections. Code quality, infrastructure, DevSecOps, tech debt,
+  AI-first development, Green Coding, bug-reduction policy, Git protocols,
+  quality protocols, advanced architecture (Trinity DTO, CQRS, Feature
+  Flag Lifecycle).
+- **100_api_integration.md**: RESTful design, versioning, rate limiting,
+  error handling, CORS governance, API gateway metering.
+- **200_supabase_architecture.md**: 60 sections, 200+ rules. DB design,
+  RLS, Auth, Storage, Migration, Edge Functions, Realtime, pgvector,
+  multi-tenancy, operational maturity model.
+- **300_web_frontend.md**: Next.js/React/TypeScript. 49 parts, 300
+  sections. App Router, Server/Client boundary, CSS architecture,
+  React 19, forms, state management, performance, SEO/GEO, accessibility,
+  testing, deployment, modern Web APIs, AI integration, 5-level maturity.
+- **310_headless_cms.md**: 80 parts, 160 sections, 131 rules. CMS
+  philosophy, content modeling, rendering, CDN, publishing workflows,
+  AI-Ready Content, Agentic CMS, multi-tenant, 40 anti-patterns.
+- **400_mobile_flutter.md**: 55 parts, 265 sections. Flutter 3.41+,
+  Riverpod 3.0+, Impeller, Clean Architecture, offline-first, security
+  (OWASP MASVS), Passkeys/FIDO2, 50 anti-patterns.
+- **410_native_platforms.md**: Kotlin 2.x, Swift 6, KMP, Jetpack Compose,
+  SwiftUI, on-device AI, security, 20 anti-patterns.
+- **500_firebase_gcp.md**: 55 parts. Cloud Run, Firestore, Auth, FCM,
+  Genkit, Vertex AI, Zero Trust, FinOps, Terraform, 30 anti-patterns.
+- **510_aws_cloud.md**: 155 sections, 240+ rules. Well-Architected
+  Framework, all major AWS services, 20 anti-patterns.
+
+### ai/ — AI & Data (2 files)
+- **000_ai_engineering.md**: 48 parts, 150+ sections. AI UX patterns,
+  ethics (EU AI Act), RAG (GraphRAG), Agentic AI (L1-L5, MCP/A2A),
+  guardrails, AI FinOps, LLMOps, 20 anti-patterns.
+- **100_data_analytics.md**: 60 parts, 206 sections. Event taxonomy,
+  A/B testing, Privacy Sandbox, OpenTelemetry, AIOps 2.0, LLM
+  observability, 25 anti-patterns.
+
+### operations/ — Operations & SRE (8 files)
+- **000_internal_tools.md**: 50 parts, 231 sections. Admin dashboard,
+  RBAC/ABAC, audit logging, AI integration, FinOps, 20 anti-patterns.
+- **100_sales_bizdev.md**: Challenger Sale, MEDDIC, Sales Funnel,
+  Partner evaluation. 10 parts, 38 sections.
+- **200_hr_organization.md**: Talent Density, Bar Raiser, OKR, Team
+  Topologies, Remote-First. 9 parts, 34 sections.
+- **300_customer_experience.md**: AI agent strategy, omnichannel,
+  Customer Health Score, churn-risk reduction. 40 parts.
+- **400_site_reliability.md**: SLI/SLO/SLA, chaos engineering,
+  Platform Engineering, AIOps. 55 parts, 166 sections.
+- **500_incident_response.md**: ISO 22301/NIST CSF 2.0, BIA, crisis
+  communication, BCP/DR, blameless postmortem. 31 parts.
+- **600_cloud_finops.md**: FinOps Foundation 2026, FOCUS v1.3, AI/ML
+  FinOps, Agentic AI FinOps, K8s FinOps, GreenOps. 25 parts, 57 sections.
+- **700_partnership_ecosystem.md**: Partnership Maturity Model,
+  Ecosystem Flywheel, Developer Portal. 9 parts, 34 sections.
+
+### security/ — Security & Legal (4 files)
+- **000_security_privacy.md**: Zero Trust (NIST 800-207), FIDO2,
+  OWASP Top 10 2025, AI/LLM security (OWASP LLM Top 10), supply
+  chain (SBOM/SLSA), PQC readiness. 22 sections.
+- **100_data_governance.md**: GDPR/Global Privacy Laws/CCPA/EU AI Act, consent
+  management, RegTech, quantum crypto agility. 45 sections.
+- **200_oss_compliance.md**: License classification, SBOM (CycloneDX/
+  SPDX), SLSA v1.1, SCA tools. 49 sections, 280+ rules.
+- **300_ip_due_diligence.md**: Patents, trade secrets, AI-generated IP,
+  exit strategy, DD operations. 50 sections.
+
+### quality/ — Testing & QA (1 file)
+- **000_qa_testing.md**: Test philosophy, 10+ test types, security
+  testing, AI-driven testing, 5-level maturity model. 40 sections.
+
+---
+
+## Layer 2: Blueprint Templates (Mutable Project State)
+
+Mutable templates for each project:
+- **core/000_project_overview.md**: Project tech stack, architecture, goals
+- **core/010_project_lessons_log.md**: Central lessons index with auto-separation
+- **core/998_feature_spec_template.md**: Feature spec with Given/When/Then
+  acceptance criteria (Blueprint First core)
+- **core/999_project_specific_template.md**: Custom project rules
+
+---
+
+## Layer 3: Prompts (Optional Execution Framework)
+
+Optional reusable prompt templates organized by role:
+
+### develop/ — Development & Execution (5 prompts)
+- **feature_development.md**: New feature implementation, improvement,
+  bug fixing, and compliance auditing
+- **refactoring_audit.md**: Non-destructive refactoring — structure,
+  type safety, DRY without behavior changes
+- **push_execute.md**: Quality gate, DB integrity, branch strategy,
+  and atomic push execution
+- **ci_fix.md**: CI/CD failure reproduction, root cause analysis, fix,
+  and rule feedback
+- **safe_upgrade_execute.md**: Manifest-based selective Axiarch upgrade
+  execution for existing adopter projects, including source-only default skip
+  and explicit interactive selection boundaries plus deduplicated action choices
+
+### audit/ — Quality & Integrity Auditing (5 prompts)
+- **fullstack_qa_audit.md**: 6-Pillar operational quality review
+  with priority reporting and ROI proposals
+- **api_architecture_audit.md**: API design, DTO, Zero Trust,
+  omnichannel readiness
+- **data_integrity_audit.md**: JSON dump detection, Hybrid Sync,
+  Split Brain elimination, facade detection
+- **system_integrity_audit.md**: Type safety, API/DB sync, facade
+  detection, data monetization readiness
+- **deep_optimization_audit.md**: Media/LCP/SSR gap root cause
+  detection and full-system integrity
+
+### govern/ — Compliance & Governance (5 prompts)
+- **compliance_inspector_audit.md**: 8 Major Constitutional Violations
+  framework deep compliance audit
+- **constitution_compliance_audit.md**: 7 Major Violations scan
+- **governance_auditor.md**: 8-Pillar holistic governance audit
+- **blueprint_governance_audit.md**: Crystallize development insights
+  into Blueprint rules
+- **localization_audit.md**: native UI coverage review, LTV, AI/GEO, legal
+  localization audit
+
+### operate/ — Incident Response & Onboarding (2 prompts)
+- **onboarding_audit.md**: Codebase deep understanding, architecture,
+  landmines, and first actions
+- **incident_response.md**: SRE-focused triage, 5 Whys RCA, emergency
+  fix, postmortem, recurrence-risk reduction
+
+---
+
+## Agent Compatibility
+
+| Agent | Status | Native Config |
+|:------|:-------|:-------------|
+| OpenAI Codex | ⚙️ Primary target | `AGENTS.md` + `.codex/hooks.json` (4 hooks including PostToolUse diff guard); use `update_plan` for native plan state |
+| Claude Code | ⚙️ Primary target | `CLAUDE.md` + `.claude/settings.json` (4 hooks: SessionStart / UserPromptSubmit / PreToolUse / PostToolUse); use Task tools (`TaskCreate` / `TaskUpdate` / `TaskList` / `TaskGet`) when available |
+| Google Antigravity | ✅ Verified primary | `.agents/rules/prompt_pointer.md` |
+| Cursor | ⚠️ Extended pointer-only candidate; unverified, no operation guarantee | `.cursor/rules/axiarch.mdc` |
+| GitHub Copilot | ⚠️ Extended pointer-only candidate; unverified, no operation guarantee | `.github/copilot-instructions.md` |
+| Windsurf | ⚠️ Extended pointer-only candidate; unverified, no operation guarantee | `.windsurfrules` |
+| Aider / Zed | ⚠️ Unverified; no operation guarantee | Reads `AGENTS.md` directly |
+
+---
+
+## Quick Start
+
+Note: the main-branch installer installs Axiarch v1.0.0 by default from `tags/v1.0.0`; for another pinned release, pass `AXIARCH_REF=tags/vX.Y.Z` to the right-hand `bash` process.
+
+```bash
+# Option 1: Interactive setup (recommended)
+curl -sSL https://raw.githubusercontent.com/s-kyono/axiarch/main/init.sh | bash
+
+# Option 1b: Pinned stable tag
+curl -sSL https://raw.githubusercontent.com/s-kyono/axiarch/main/init.sh | AXIARCH_REF=tags/v1.0.0 bash
+
+# Option 2: Manual copy
+cp AGENTS.md /path/to/your/project/
+cp -r axiarch-rules /path/to/your/project/
+
+# Optional: safe-upgrade metadata and scripts
+cp axiarch-manifest.json /path/to/your/project/
+cp -r axiarch-scripts /path/to/your/project/
+# Optional: cp -r axiarch-prompts /path/to/your/project/
+```
+
+Existing adopter projects can preview a selective upgrade with `bash axiarch-scripts/axiarch-upgrade.sh --to v1.0.0 --dry-run`. Older adopters that do not yet have the helper can bootstrap it temporarily with `curl -sSL https://raw.githubusercontent.com/s-kyono/axiarch/v1.0.0/axiarch-scripts/axiarch-upgrade.sh -o /tmp/axiarch-upgrade.sh` and then run `bash /tmp/axiarch-upgrade.sh --target "$(pwd)" --to v1.0.0 --dry-run`. The wizard preserves project-owned Blueprint state by default, keeps manifest-listed Axiarch-shared Blueprint rules reviewable for README/INDEX consistency, keeps source-repository-only files skipped by default unless explicitly selected in `--interactive`, and lets ambiguous groups be reviewed interactively with deduplicated action choices. In the Axiarch source repository, Check 15 also verifies source release-file Git tracking for current core release files, including `axiarch-task-state.sh`; adopter projects skip that source-only tracking check.
+
+## Language Support
+
+Available in both languages: Japanese (authoritative) and English (symmetric counterpart).
+All 39 Universal Rules and core Blueprint starter files are available in both languages.
+The optional prompt library (`axiarch-prompts/`) is also available in JA/EN.
+The init.sh setup script handles language and agent selection; deleting unused
+language directories is optional when a project is fixed to one language.
+
+## Links
+
+- Repository: https://github.com/s-kyono/axiarch
+- Summary (llms.txt): https://github.com/s-kyono/axiarch/blob/main/llms.txt
+- README (Japanese): https://github.com/s-kyono/axiarch#-axiarch%E3%82%A2%E3%82%AF%E3%82%B7%E3%82%A2%E3%83%BC%E3%82%AF%E3%81%A8%E3%81%AF
+- README (English): https://github.com/s-kyono/axiarch#-what-is-axiarch
+- Issues: https://github.com/s-kyono/axiarch/issues
+- Discussions: https://github.com/s-kyono/axiarch/discussions
+- Releases: https://github.com/s-kyono/axiarch/releases

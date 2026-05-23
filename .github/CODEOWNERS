@@ -1,0 +1,65 @@
+# =============================================================================
+# Axiarch — CODEOWNERS
+# =============================================================================
+# すべての変更はデフォルトでメンテナーのレビューが必要です。
+# All changes require maintainer review by default.
+
+* @s-kyono
+
+# =============================================================================
+# AGENTS.md — 最上位プロトコル / Top-Level Protocol
+# =============================================================================
+# 「憲法改正」として特に厳格なレビューが必要。
+# Requires "Constitutional Amendment" review — highest scrutiny.
+
+AGENTS.md @s-kyono
+
+# =============================================================================
+# Universal Rules — 不変の憲法 / Immutable Constitution
+# =============================================================================
+# Universal Rulesは「憲法」です。変更には明示的な憲法改正の承認が必要。
+# Universal Rules are the Constitution. Changes require explicit "Amend Constitution" approval.
+
+axiarch-rules/ja/universal/ @s-kyono
+axiarch-rules/en/universal/ @s-kyono
+axiarch-rules/ja/LOADING_PROTOCOL.md @s-kyono
+axiarch-rules/en/LOADING_PROTOCOL.md @s-kyono
+axiarch-rules/ja/CRYSTALLIZATION_PROTOCOL.md @s-kyono
+axiarch-rules/en/CRYSTALLIZATION_PROTOCOL.md @s-kyono
+axiarch-rules/ja/INDEX.md @s-kyono
+axiarch-rules/en/INDEX.md @s-kyono
+axiarch-rules/ja/compliance_matrix.md @s-kyono
+axiarch-rules/en/compliance_matrix.md @s-kyono
+
+# =============================================================================
+# Blueprint — プロジェクト固有テンプレート / Project-Specific Templates
+# =============================================================================
+# Blueprintは可変です。改善・追加を歓迎します（Issueでの事前議論を推奨）。
+# Blueprints are mutable. Improvements and additions welcome (prior Issue discussion recommended).
+
+axiarch-rules/ja/blueprint/ @s-kyono
+axiarch-rules/en/blueprint/ @s-kyono
+
+# =============================================================================
+# Prompt Library — 再利用可能プロンプト / Reusable Prompt Templates
+# =============================================================================
+# プロンプト集は可変です。改善・追加を歓迎します。
+# Prompt library is mutable. Improvements and additions welcome.
+
+axiarch-prompts/ @s-kyono
+
+# =============================================================================
+# Diagnostic & Hook Scripts — 配布スクリプト群 / Distributed Scripts (v1.0.0+)
+# =============================================================================
+# axiarch-scripts/ は採用先プロジェクトに配布される hook + diagnostic 一式。
+# 動作不良が採用先全体に伝播するため、特に厳格な review が必要。
+# axiarch-scripts/ ships the hook + diagnostic suite to adopter projects.
+# Defects propagate across all adopters — requires stricter review.
+
+axiarch-scripts/ @s-kyono
+
+# =============================================================================
+# GitHub Config & Repository Health
+# =============================================================================
+
+.github/ @s-kyono
