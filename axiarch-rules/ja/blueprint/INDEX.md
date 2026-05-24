@@ -73,6 +73,10 @@ blueprint/
 
 > 対応 Universal: `engineering/`
 
+| ファイル | 説明 |
+|:--|:--|
+| [engineering/020_cli_feature_spec.md](engineering/020_cli_feature_spec.md) | `npx axiarch init` CLI Phase 1 MVP 仕様。複数エージェント選択・npm 同梱・@clack/prompts 対話フロー・受け入れ条件 |
+
 ---
 
 ## 📂 design/: デザイン & UX

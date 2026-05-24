@@ -1,0 +1,46 @@
+{
+  "name": "axiarch",
+  "version": "1.0.0",
+  "description": "Axiarch CLI — Constitution-Driven AI Agent Governance Framework",
+  "type": "module",
+  "bin": {
+    "axiarch": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "assets"
+  ],
+  "scripts": {
+    "sync-assets": "node scripts/sync-assets.mjs",
+    "build:ts": "tsup",
+    "build": "node scripts/sync-assets.mjs && tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.0",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/s-kyono/axiarch"
+  },
+  "homepage": "https://github.com/s-kyono/axiarch",
+  "license": "MIT",
+  "keywords": [
+    "axiarch",
+    "ai-governance",
+    "claude-code",
+    "codex",
+    "cursor",
+    "agentic",
+    "constitution"
+  ]
+}

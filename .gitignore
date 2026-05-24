@@ -39,6 +39,9 @@ out/
 *.tsbuildinfo
 coverage/
 
+# CLI package: generated assets (synced from repo root at build time)
+packages/cli/assets/
+
 # Flutter/Dart
 .dart_tool/
 .packages

@@ -1,0 +1,9 @@
+{
+  "name": "axiarch-repo",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "build": "npm run build --workspace=packages/cli",
+    "sync-assets": "npm run sync-assets --workspace=packages/cli"
+  }
+}

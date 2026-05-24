@@ -39,6 +39,7 @@
 | # | ドメイン | ファイル | 教訓数 |
 |:--|:--------|:--------|:-------|
 | 1 | 運用 | [operations/010_release_upgrade_operations.md](../operations/010_release_upgrade_operations.md) | 12 |
+| 2 | コア・ガバナンス | [core/020_governance_rules.md](020_governance_rules.md) | 3 |
 
 <!-- AUTO-CRYSTALLIZATION: ドメインファイル作成時、上の表に行を追加してください -->
 <!-- 例: | 1 | DB・認証 | `engineering/010_database_auth.md` | 3 | -->
@@ -61,10 +62,12 @@
 
 ---
 
-### [Initial] プロジェクト開始時の教訓
-**Domain:** ガバナンス
-**Context:** 新規プロジェクトまたはルールの刷新時。
-**Rule:** `AGENTS.md` および `axiarch-rules` のプロトコルを基準として遵守すること。
+### コア・ガバナンス教訓（昇華済み）
+
+> **→ [core/020_governance_rules.md](020_governance_rules.md) に昇華済み（3件）**
+> - `[Initial]` プロジェクト開始時の基本原則
+> - `[2026-05-24]` diff guard は package-lock.json 等の untracked ファイルも行数計上する
+> - `[2026-05-24]` セッションプロセスドキュメントの Write には overwrite-allow whitelist が必要
 
 ---
 
