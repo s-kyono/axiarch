@@ -9,3 +9,13 @@ updates:
       - "github-actions"
     commit-message:
       prefix: "ci"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/cli"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore"
